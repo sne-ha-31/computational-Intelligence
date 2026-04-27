@@ -1,0 +1,103 @@
+male(motilal).
+male(jawaharlal).
+male(ranjit).
+male(feroze).
+male(rajiv).
+male(sanjay).
+male(rahul).
+male(varun).
+male(robert).
+male(gautam).
+male(raihan).
+
+female(swaruprani).
+female(kamala).
+female(vijayalakshmi).
+female(krishna).
+female(indira).
+female(sonia).
+female(priyanka).
+female(menka).
+female(maria).
+female(rita).
+female(nayantara).
+female(chandralekha).
+female(geeta).
+
+parent(motilal, jawaharlal).
+parent(swaruprani, jawaharlal).
+
+parent(motilal, vijayalakshmi).
+parent(swaruprani, vijayalakshmi).
+
+parent(motilal, krishna).
+parent(swaruprani, krishna).
+
+parent(jawaharlal, indira).
+parent(kamala, indira).
+
+parent(indira, rajiv).
+parent(feroze, rajiv).
+
+parent(indira, sanjay).
+parent(feroze, sanjay).
+
+parent(rajiv, rahul).
+parent(sonia, rahul).
+
+parent(rajiv, priyanka).
+parent(sonia, priyanka).
+
+parent(sanjay, varun).
+parent(menka, varun).
+
+parent(priyanka, maria).
+parent(robert, maria).
+
+parent(priyanka, raihan).
+parent(robert, raihan).
+
+parent(vijayalakshmi, rita).
+parent(ranjit, rita).
+
+parent(vijayalakshmi, nayantara).
+parent(ranjit, nayantara).
+
+parent(vijayalakshmi, chandralekha).
+parent(ranjit, chandralekha).
+
+parent(nayantara, geeta).
+parent(gautam, geeta).
+
+father(X,Y) :- parent(X,Y), male(X).
+mother(X,Y) :- parent(X,Y), female(X).
+
+grandparent(X,Y) :- parent(X,Z), parent(Z,Y).
+grandfather(X,Y) :- grandparent(X,Y), male(X).
+grandmother(X,Y) :- grandparent(X,Y), female(X).
+
+sibling(X,Y) :- parent(Z,X), parent(Z,Y), X \= Y.
+brother(X,Y) :- sibling(X,Y), male(X).
+sister(X,Y) :- sibling(X,Y), female(X).
+
+ancestor(X,Y) :- parent(X,Y).
+ancestor(X,Y) :- parent(X,Z), ancestor(Z,Y).
+
+cousin(X, Y) :-
+    parent(P1, X),
+    parent(P2, Y),
+    sibling(P1, P2),
+    X \= Y.
+
+uncle(X, Y) :- brother(X, P), parent(P, Y).
+
+aunty(X, Y) :- sister(X, P), parent(P, Y).
+aunty(X, Y) :-
+    spouse(X, U),
+    uncle(U, Y).
+
+uncle(X, Y) :-
+    spouse(X, A),
+    aunty(A, Y).
+
+spouse(X, Y) :- parent(X, Z), parent(Y, Z), X \= Y.
